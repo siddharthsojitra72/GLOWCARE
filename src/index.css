@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: 'Montserrat', sans-serif;
+  --font-primary: 'poppins', sans-serif;
+  --color-primary: #AB8872;
+  --color-secondary: #EFECE4;
+}
+
+.container{
+  @apply max-w-[1480px] px-5 lg:px-10 mx-auto
+}
+
+h1,h2,h3 {
+  @apply font-heading
+}
+
+body{
+  @apply font-primary 
+}
+
+.swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after,
+.swiper-button-prev:after,
+.swiper-rtl .swiper-button-next:after {
+  @apply !text-white !text-base !font-semibold
+}
+
+.swiper.swiper-fade.swiper-initialized.swiper-horizontal.swiper-watch-progress.swiper-backface-hidden.mb-6.sm\:mb-10.hero-swiper {
+  @apply mb-0
+}
+
+.swiper-pagination-bullet {
+  @apply bg-[#dcdcdc] opacity-1 w-2.5 h-2.5 rounded-full mx-1.5 transition transition-all ease-in duration-300
+}
+
+
+
+.swiper-pagination-bullet-active {
+  
+  @apply !bg-primary !w-5 !rounded-lg transform !scale-[1.2]
+}
+
+* {
+  user-select: none;
+}
