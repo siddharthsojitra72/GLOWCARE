@@ -1,3 +1,13 @@
+
+import SerumImg from "../assets/Serum.webp";
+import HeroProductImg from "../assets/hero-product-img.jpg";
+import HeroProductImg1 from "../assets/hero-product-img1.jpg";
+import HeroProductImg2 from "../assets/hero-product-img2.jpg";
+import MoisturizerImg from "../assets/Moisturizer.webp";
+import CleanserImg from "../assets/cleanser.webp";
+import SunscreenImg from "../assets/Sunscreen.webp";
+import GoldMaskImg from "../assets/24K-Gold-Face-Mask.webp";
+
 export const products = {
   "product-1": {
     id: "product-1",
@@ -9,10 +19,10 @@ export const products = {
     type: "serum",
     category: "skincare",
     images: [
-      "/src/assets/Serum.webp",
-      "/src/assets/hero-product-img.jpg",
-      "/src/assets/hero-product-img1.jpg",
-      "/src/assets/hero-product-img2.jpg"
+      SerumImg,
+      HeroProductImg,
+      HeroProductImg1,
+      HeroProductImg2
     ],
     variants: [
       {
@@ -65,9 +75,9 @@ export const products = {
     type: "moisturizer",
     category: "skincare",
     images: [
-      "/src/assets/Moisturizer.webp",
-      "/src/assets/hero-product-img.jpg",
-      "/src/assets/hero-product-img1.jpg"
+      MoisturizerImg,
+      HeroProductImg,
+      HeroProductImg1
     ],
     variants: [
       {
@@ -113,8 +123,8 @@ export const products = {
     type: "cleanser",
     category: "skincare",
     images: [
-      "/src/assets/cleanser.webp",
-      "/src/assets/hero-product-img.jpg"
+      CleanserImg,
+      HeroProductImg
     ],
     variants: [
       {
@@ -161,8 +171,8 @@ export const products = {
     type: "sunscreen",
     category: "skincare",
     images: [
-      "/src/assets/Sunscreen.webp",
-      "/src/assets/hero-product-img.jpg"
+      SunscreenImg,
+      HeroProductImg
     ],
     variants: [
       {
@@ -208,8 +218,8 @@ export const products = {
     type: "sunscreen",
     category: "skincare",
     images: [
-      "/src/assets/24K-Gold-Face-Mask.webp",
-      "/src/assets/hero-product-img.jpg"
+      GoldMaskImg,
+      HeroProductImg
     ],
     variants: [
       {

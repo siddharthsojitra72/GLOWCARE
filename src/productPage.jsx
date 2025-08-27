@@ -24,6 +24,8 @@ import "swiper/css/thumbs";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 
+import Serum from "./assets/Serum.webp";
+
 // Helper functions for price handling
 const formatPrice = (price) => {
   if (typeof price === "number") return price.toFixed(2);
