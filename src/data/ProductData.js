@@ -9,7 +9,7 @@ export const products = {
     type: "serum",
     category: "skincare",
     images: [
-      "/src/assets/Serum.webp",
+      "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
       "/src/assets/hero-product-img.jpg",
       "/src/assets/hero-product-img1.jpg",
       "/src/assets/hero-product-img2.jpg"
