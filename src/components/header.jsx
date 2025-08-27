@@ -151,6 +151,7 @@ const Header = () => {
           <button
             onClick={() => navigate(user ? "/account" : "/login")}
             aria-label={user ? "Account" : "Log in"}
+            className="hidden md:block"
           >
             <AiOutlineUser className="text-2xl" />
           </button>

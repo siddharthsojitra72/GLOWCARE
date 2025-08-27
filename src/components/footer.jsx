@@ -36,9 +36,9 @@ const Footer = () => {
   return (
     <footer className="bg-secondary pt-16 pb-8 text-gray-800">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo and Info */}
-          <div className="space-y-5">
+          <div className="col-span-2 md:col-span-1 space-y-5">
             <Link to="/" className="inline-block">
               <img
                 src={Logo}
@@ -131,7 +131,7 @@ const Footer = () => {
           </div>
 
           {/* Newsletter */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <h3 className="text-lg font-semibold mb-3">
               Join the Glowcare Community
             </h3>

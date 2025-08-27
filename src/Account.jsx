@@ -18,7 +18,7 @@ const Account = () => {
       <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
         <div className="max-w-3xl mx-auto">
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 md:gap-0 md:flex-row items-start md:items-center justify-between">
               <div>
                 <h1 className="text-2xl font-semibold text-gray-900">My Account</h1>
                 <p className="text-sm text-gray-600">Signed in as {user.name || "Guest"} ({user.email})</p>
