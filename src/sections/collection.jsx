@@ -12,7 +12,7 @@ const Collection = () => {
 
   return (
     <section className="container mt-14 md:mt-25 px-4">
-      <div className="text-left mb-10 flex justify-between items-center gap-4 flex-col md:flex-row">
+      <div className="text-left mb-10 flex justify-between items-start md:items-center gap-4 flex-col md:flex-row">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-primary">
             Shop Our Best Sellers
