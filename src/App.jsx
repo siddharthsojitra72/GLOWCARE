@@ -5,6 +5,9 @@ import Announcementbar from "../src/components/announcementbar";
 import Header from "../src/components/header";
 import Footer from "../src/components/footer";
 import Contact from "./contact";
+import Login from "./Login.jsx";
+import Register from "./Register.jsx";
+import Account from "./Account.jsx";
 import NotFound from "./NotFound";
 import Faq from "./faq";
 import ProductPage from "./productPage.jsx";
@@ -21,6 +24,9 @@ const App = () => {
         <Route path="/Contact" element={<Contact />} />
         <Route path="/best-sellers" element={<BestSeller />} />
         <Route path="/Faq" element={<Faq />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/product/:productId" element={<ProductPage />} />
         <Route path="/cart" element={<Cartpage />} />
         <Route path="/*" element={<NotFound />} />

@@ -19,6 +19,10 @@ body{
   @apply font-primary 
 }
 
+button{
+  @apply cursor-pointer
+}
+
 .swiper-button-next:after,
 .swiper-rtl .swiper-button-prev:after,
 .swiper-button-prev:after,

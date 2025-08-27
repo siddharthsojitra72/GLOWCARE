@@ -3,7 +3,8 @@ import { GoSearch } from "react-icons/go";
 import { BsCart3, BsXLg } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
 import { IoIosArrowDown, IoIosArrowUp, IoIosArrowBack } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
 import logo from "../assets/GLOWCARE.svg";
 import AllProduct from "../assets/24K-Gold-Face-Mask.webp";
@@ -30,6 +31,8 @@ const menuLinks = [
 ];
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [isShopDesktopHovered, setIsShopDesktopHovered] = useState(false);
   // const [isShopMobileExpanded, setIsShopMobileExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -145,9 +148,12 @@ const Header = () => {
           <button className="block lg:hidden">
             <GoSearch className="text-2xl" />
           </button>
-          <Link to="/account">
+          <button
+            onClick={() => navigate(user ? "/account" : "/login")}
+            aria-label={user ? "Account" : "Log in"}
+          >
             <AiOutlineUser className="text-2xl" />
-          </Link>
+          </button>
           <Link to="/cart">
             <BsCart3 className="text-2xl" />
           </Link>
@@ -283,14 +289,17 @@ const Header = () => {
 
               {/* Footer in root view */}
               <div className="mt-auto border-t border-gray-200 pt-3 flex flex-col gap-2">
-                <Link
-                  to="/account"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-base flex items-center gap-2"
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    navigate(user ? "/account" : "/login");
+                  }}
+                  className="text-base flex items-center gap-2 text-left"
+                  aria-label={user ? "Account" : "Log in"}
                 >
                   <AiOutlineUser className="text-xl" />
-                  Log in
-                </Link>
+                  {user ? "Account" : "Log in"}
+                </button>
                 <div className="flex gap-4 pt-3">
                   {["facebook", "pinterest", "instagram", "tiktok"].map((icon) => (
                     <a key={icon} href="#" aria-label={icon}>
