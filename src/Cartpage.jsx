@@ -35,7 +35,7 @@ const Cartpage = () => {
 
   if (!items || items.length === 0) {
     return (
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-12 md:py-24 bg-gray-50">
         <div className="container px-4 sm:px-6 lg:px-8 mx-auto text-center">
           <h1 className="text-2xl md:text-3xl font-semibold mb-3">Your cart is empty</h1>
           <p className="text-gray-600 mb-6">Browse our products and add your favorites to the cart.</p>

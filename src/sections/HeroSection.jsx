@@ -34,7 +34,7 @@ const PRODUCTS = [
     mainImage: NewMainImage1,
     image: NewProductImage1,
     link: "/product/1",
-    altText: "Woman using Botanical Radiance Cream",
+    altText: "Woman using Radiance Cream",
   },
   {
     id: 2,
@@ -153,7 +153,6 @@ const HeroSection = () => {
                     alt={product.altText}
                     width={350}
                     height={350}
-                    loading="lazy"
                     className="rounded-lg shadow-md w-full h-auto object-cover aspect-square"
                   />
                 </div>
