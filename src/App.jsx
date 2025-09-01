@@ -13,6 +13,11 @@ import Faq from "./faq";
 import ProductPage from "./productPage.jsx";
 import Cartpage from "./Cartpage.jsx";
 import BestSeller from "./BestSeller.jsx";
+import AllProducts from "./AllProducts.jsx";
+import NewArrivals from "./NewArrivals.jsx";
+import SkincareKits from "./SkincareKits.jsx";
+import OurStory from "./OurStory.jsx";
+import Learn from "./Learn.jsx";
 
 const App = () => {
   return (
@@ -23,6 +28,11 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/Contact" element={<Contact />} />
         <Route path="/best-sellers" element={<BestSeller />} />
+        <Route path="/all-products" element={<AllProducts />} />
+        <Route path="/new-arrivals" element={<NewArrivals />} />
+        <Route path="/skincare-kits" element={<SkincareKits />} />
+        <Route path="/our-story" element={<OurStory />} />
+        <Route path="/learn" element={<Learn />} />
         <Route path="/Faq" element={<Faq />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

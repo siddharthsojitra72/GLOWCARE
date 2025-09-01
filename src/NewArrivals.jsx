@@ -5,7 +5,7 @@ import { GoSearch } from "react-icons/go";
 import { BsGrid, BsList, BsFilter, BsXLg } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
 
-const BestSeller = () => {
+const NewArrivals = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
@@ -38,6 +38,15 @@ const BestSeller = () => {
   const filteredProducts = useMemo(() => {
     let filtered = Object.values(products);
 
+    // Filter for new arrivals (products launched in last 6 months)
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    
+    filtered = filtered.filter(product => {
+      const launchDate = new Date(product.launchDate);
+      return launchDate >= sixMonthsAgo;
+    });
+
     // Search filter
     if (searchTerm) {
       filtered = filtered.filter(product =>
@@ -61,7 +70,7 @@ const BestSeller = () => {
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
-    // Sort products - Best Sellers should prioritize sales
+    // Sort products - New Arrivals should prioritize launch date
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'name':
@@ -72,10 +81,10 @@ const BestSeller = () => {
           return b.price - a.price;
         case 'discount':
           return (b.comparePrice - b.price) - (a.comparePrice - a.price);
-        case 'sales':
-          return b.sales - a.sales;
+        case 'newest':
+          return new Date(b.launchDate) - new Date(a.launchDate);
         default:
-          return b.sales - a.sales; // Default to sales ranking for Best Sellers
+          return new Date(b.launchDate) - new Date(a.launchDate); // Default to newest first
       }
     });
 
@@ -218,7 +227,7 @@ const BestSeller = () => {
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
           <option value="discount">Best Discount</option>
-          <option value="sales">Best Sellers (Sales)</option>
+          <option value="newest">Newest Arrivals</option>
         </select>
       </div>
 
@@ -255,10 +264,10 @@ const BestSeller = () => {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Best Sellers
+              New Arrivals
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover our most popular and highest-selling skincare products, chosen by thousands of satisfied customers
+              Be the first to discover our latest skincare innovations and newly launched products
             </p>
           </div>
         </div>
@@ -410,4 +419,4 @@ const BestSeller = () => {
   );
 };
 
-export default BestSeller;
+export default NewArrivals;

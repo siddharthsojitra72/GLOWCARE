@@ -5,6 +5,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { IoIosArrowDown, IoIosArrowUp, IoIosArrowBack } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import { products } from "../data/ProductData.js";
 
 import logo from "../assets/GLOWCARE.svg";
 import AllProduct from "../assets/24K-Gold-Face-Mask.webp";
@@ -17,10 +18,10 @@ const menuLinks = [
   {
     label: "Shop",
     subMenu: [
-      { label: "All Products", to: "/shop/moisturizers", img: AllProduct },
+      { label: "All Products", to: "/all-products", img: AllProduct },
       { label: "Best Seller", to: "/best-sellers", img: BestSeller },
-      { label: "New Arrivals", to: "/shop/shampoo", img: NewArrivals },
-      { label: "Skincare Kits", to: "/shop/bundles", img: SkincareKits },
+      { label: "New Arrivals", to: "/new-arrivals", img: NewArrivals },
+      { label: "Skincare Kits", to: "/skincare-kits", img: SkincareKits },
     ],
   },
   { label: "Shop by Concern", to: "/shop-by-concern" },
@@ -34,11 +35,108 @@ const Header = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isShopDesktopHovered, setIsShopDesktopHovered] = useState(false);
-  // const [isShopMobileExpanded, setIsShopMobileExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const closeButtonRef = useRef(null);
+  const searchInputRef = useRef(null);
   const scrollYRef = useRef(0);
   const [mobileView, setMobileView] = useState("root"); // 'root' | 'shop'
+
+  // Search functionality
+  const handleSearch = (term) => {
+    if (!term.trim()) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    const results = [];
+    const searchLower = term.toLowerCase();
+
+    // Search in products
+    Object.values(products).forEach(product => {
+      if (
+        product.name.toLowerCase().includes(searchLower) ||
+        product.description.toLowerCase().includes(searchLower) ||
+        product.type.toLowerCase().includes(searchLower) ||
+        product.category.toLowerCase().includes(searchLower)
+      ) {
+        results.push({
+          type: 'product',
+          data: product,
+          relevance: product.name.toLowerCase().includes(searchLower) ? 3 : 1
+        });
+      }
+    });
+
+    // Search in menu links
+    menuLinks.forEach(link => {
+      if (link.label.toLowerCase().includes(searchLower)) {
+        results.push({
+          type: 'page',
+          data: link,
+          relevance: 2
+        });
+      }
+      if (link.subMenu) {
+        link.subMenu.forEach(subLink => {
+          if (subLink.label.toLowerCase().includes(searchLower)) {
+            results.push({
+              type: 'page',
+              data: subLink,
+              relevance: 2
+            });
+          }
+        });
+      }
+    });
+
+    // Sort by relevance
+    results.sort((a, b) => b.relevance - a.relevance);
+    const finalResults = results.slice(0, 8); // Limit to 8 results
+    
+    setSearchResults(finalResults);
+    setShowSearchResults(true);
+  };
+
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    handleSearch(value);
+  };
+
+  const handleSearchResultClick = (result) => {
+    try {
+      if (result.type === 'product') {
+        navigate(`/product/${result.data.id}`);
+      } else if (result.type === 'page') {
+        navigate(result.data.to);
+      }
+      
+      // Close search overlay
+      setIsSearchOpen(false);
+      setSearchTerm("");
+      setShowSearchResults(false);
+    } catch (error) {
+      console.error('Error navigating to search result:', error);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchResults.length > 0) {
+      handleSearchResultClick(searchResults[0]);
+    }
+  };
+
+  const closeSearch = () => {
+    setIsSearchOpen(false);
+    setSearchTerm("");
+    setShowSearchResults(false);
+  };
 
   // Close mobile menu on resize
   useEffect(() => {
@@ -93,13 +191,14 @@ const Header = () => {
     const onKeyDown = (e) => {
       if (e.key === "Escape") {
         setIsMobileMenuOpen(false);
+        closeSearch();
       }
     };
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpen || isSearchOpen) {
       document.addEventListener("keydown", onKeyDown);
     }
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isSearchOpen]);
 
   // Focus management: focus close button when opening
   useEffect(() => {
@@ -107,6 +206,36 @@ const Header = () => {
       closeButtonRef.current.focus();
     }
   }, [isMobileMenuOpen]);
+
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if click is outside the search input and search overlay
+      const searchInput = searchInputRef.current;
+      const searchOverlay = document.querySelector('[data-search-overlay]');
+      
+      if (searchInput && searchOverlay) {
+        const isClickOutsideInput = !searchInput.contains(event.target);
+        const isClickOutsideOverlay = !searchOverlay.contains(event.target);
+        
+        if (isClickOutsideInput && isClickOutsideOverlay) {
+          closeSearch();
+        } else if (isClickOutsideInput) {
+          setShowSearchResults(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Focus search input when search opens
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
 
   return (
     <header className="bg-secondary border-b py-8 border-[#E0E0E0]">
@@ -127,7 +256,11 @@ const Header = () => {
         </button>
 
         {/* Desktop Search Icon */}
-        <button className="hidden lg:block">
+        <button 
+          className="hidden lg:block"
+          onClick={() => setIsSearchOpen(true)}
+          aria-label="Open search"
+        >
           <GoSearch className="text-2xl" />
         </button>
 
@@ -145,9 +278,14 @@ const Header = () => {
 
         {/* Icons */}
         <div className="flex items-center space-x-5">
-          <button className="block lg:hidden">
+          <button 
+            className="block lg:hidden"
+            onClick={() => setIsSearchOpen(true)}
+            aria-label="Open search"
+          >
             <GoSearch className="text-2xl" />
           </button>
+
           <button
             onClick={() => navigate(user ? "/account" : "/login")}
             aria-label={user ? "Account" : "Log in"}
@@ -160,6 +298,96 @@ const Header = () => {
           </Link>
         </div>
       </nav>
+
+      {/* Search Overlay */}
+      {isSearchOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center pt-20"
+          data-search-overlay
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeSearch();
+            }
+          }}
+        >
+          <div className="bg-white w-full max-w-2xl mx-4 rounded-lg shadow-xl">
+            <div className="p-4 border-b">
+              <div className="flex items-center gap-3">
+                <GoSearch className="text-gray-400 text-xl" />
+                <form onSubmit={handleSearchSubmit} className="flex-1">
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="Search products, pages, and more..."
+                    value={searchTerm}
+                    onChange={handleSearchInputChange}
+                    className="w-full text-lg outline-none border-none"
+                  />
+                </form>
+                <button
+                  onClick={closeSearch}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <BsXLg className="text-xl" />
+                </button>
+              </div>
+            </div>
+
+            {/* Search Results */}
+            {showSearchResults && searchResults.length > 0 && (
+              <div className="max-h-96 overflow-y-auto">
+                {searchResults.map((result, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSearchResultClick(result)}
+                    className="w-full p-4 hover:bg-gray-50 text-left border-b last:border-b-0 flex items-center gap-3"
+                  >
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      {result.type === 'product' ? (
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-900 truncate">
+                        {result.type === 'product' ? result.data.name : result.data.label}
+                      </div>
+                      <div className="text-sm text-gray-500 truncate">
+                        {result.type === 'product' 
+                          ? `${result.data.type} • ${result.data.category}`
+                          : 'Page'
+                        }
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* No Results */}
+            {showSearchResults && searchTerm && searchResults.length === 0 && (
+              <div className="p-8 text-center text-gray-500">
+                <GoSearch className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                <p>No results found for "{searchTerm}"</p>
+                <p className="text-sm">Try searching with different keywords</p>
+              </div>
+            )}
+
+            {/* Search Tips */}
+            {!searchTerm && (
+              <div className="p-6 text-center text-gray-500">
+                <p className="text-sm">Search for products, categories, or pages</p>
+                <p className="text-xs mt-1">Example: "serum", "mask", "kit", "skincare"</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Desktop Menu */}
       <div className="hidden lg:flex justify-center space-x-8 pt-4 text-[16px] font-medium relative">

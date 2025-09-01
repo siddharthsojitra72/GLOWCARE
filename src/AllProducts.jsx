@@ -5,7 +5,7 @@ import { GoSearch } from "react-icons/go";
 import { BsGrid, BsList, BsFilter, BsXLg } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
 
-const BestSeller = () => {
+const AllProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
@@ -38,6 +38,8 @@ const BestSeller = () => {
   const filteredProducts = useMemo(() => {
     let filtered = Object.values(products);
 
+    // AllProducts shows all products - no pre-filtering
+
     // Search filter
     if (searchTerm) {
       filtered = filtered.filter(product =>
@@ -61,7 +63,7 @@ const BestSeller = () => {
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
-    // Sort products - Best Sellers should prioritize sales
+    // Sort products
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'name':
@@ -72,10 +74,8 @@ const BestSeller = () => {
           return b.price - a.price;
         case 'discount':
           return (b.comparePrice - b.price) - (a.comparePrice - a.price);
-        case 'sales':
-          return b.sales - a.sales;
         default:
-          return b.sales - a.sales; // Default to sales ranking for Best Sellers
+          return a.name.localeCompare(b.name);
       }
     });
 
@@ -218,7 +218,6 @@ const BestSeller = () => {
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
           <option value="discount">Best Discount</option>
-          <option value="sales">Best Sellers (Sales)</option>
         </select>
       </div>
 
@@ -255,10 +254,10 @@ const BestSeller = () => {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Best Sellers
+              All Products
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover our most popular and highest-selling skincare products, chosen by thousands of satisfied customers
+              Explore our complete collection of premium skincare products designed for every skin type and concern
             </p>
           </div>
         </div>
@@ -410,4 +409,4 @@ const BestSeller = () => {
   );
 };
 
-export default BestSeller;
+export default AllProducts;
